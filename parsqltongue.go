@@ -14,37 +14,56 @@ func NewParser() *Parser {
 	}
 }
 
+func (p *Parser) Parse(stmt string) (*SelectStatement, error) {
+	s := &SelectStatement{}
+	err := p.p.ParseString("", stmt, s)
+	if err != nil {
+		return nil, err
+	}
+	return s, nil
+}
+
 type SelectStatement struct {
-	Select  []*SelectVal
-	From    []*FromVal
-	Where   []*WhereVal
-	GroupBy []*GroupByVal
-	Having  []*HavingVal
-	OrderBy []*OrderByVal
-	Limit   []*LimitVal
-	Offset  []*OffsetVal
+	Select *SelectClause `"SELECT" @@` // Literal, column name, function
+	From   *FromClause
+	// Where   *WhereClause
+	// GroupBy *GroupByClause
+	// Having  *HavingClause
+	// OrderBy *OrderByClause
+	// Limit   *LimitClause
+	// Offset  *OffsetClause
 }
 
-type SelectVal struct {
+type SelectClause struct {
+	// TableName *string     `@Ident "."`
+	Value *LiteralVal `@@`
+	// Alias *string     `["AS"] @Ident`
 }
 
-type FromVal struct {
+type LiteralVal struct {
+	Name   *string  `@Ident`
+	String *string  `| @String`
+	Int    *int     `| @Int`
+	Float  *float64 `| @Float`
 }
 
-type WhereVal struct {
+type FromClause struct {
 }
 
-type GroupByVal struct {
+type WhereClause struct {
 }
 
-type HavingVal struct {
+type GroupByClause struct {
 }
 
-type OrderByVal struct {
+type HavingClause struct {
 }
 
-type LimitVal struct {
+type OrderByClause struct {
 }
 
-type OffsetVal struct {
+type LimitClause struct {
+}
+
+type OffsetValClause struct {
 }
