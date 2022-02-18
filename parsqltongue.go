@@ -37,7 +37,7 @@ type SelectStatement struct {
 type SelectClause struct {
 	// TableName *string     `@Ident "."`
 	Value *LiteralVal `@@`
-	// Alias *string     `["AS"] @Ident`
+	Alias *string     `[["AS"] @Ident]`
 }
 
 type LiteralVal struct {

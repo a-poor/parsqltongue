@@ -50,3 +50,23 @@ func TestParseSelect(t *testing.T) {
 	}
 	repr.Println(stmt)
 }
+
+func TestSelectAlias(t *testing.T) {
+	p := parsql.NewParser()
+
+	// alias with "AS"
+	s := "SELECT 1 AS a_number"
+	stmt, err := p.Parse(s)
+	if err != nil {
+		t.Errorf("Error parsing SELECT statement %q: %v", s, err)
+	}
+	repr.Println(stmt)
+
+	// alias no "AS"
+	s = "SELECT username user"
+	stmt, err = p.Parse(s)
+	if err != nil {
+		t.Errorf("Error parsing SELECT statement %q: %v", s, err)
+	}
+	repr.Println(stmt)
+}
