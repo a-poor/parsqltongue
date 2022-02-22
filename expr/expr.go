@@ -27,17 +27,12 @@ type AST struct {
 	Root *Value `@@`
 }
 
-// type Value struct {
-// 	Ident   *Ident        `  @@`
-// 	Literal *Literal      `| @@`
-// 	Func    *FunctionCall `| @@`
-// }
-
 type Value struct {
-	Ident   *Ident        `  @@`
-	Literal *Literal      `| @@`
-	Func    *FunctionCall `| @@`
-	Expr    *Expression   `| ( "(" @@ ")" )`
+	Ident    *Ident           `  @@`
+	Literal  *Literal         `| @@`
+	Func     *FunctionCall    `| @@`
+	Expr     *Expression      `| ( "(" @@ ")" )`
+	UnaryExp *UnaryExpression `| @@`
 }
 
 type Ident struct {
@@ -49,6 +44,11 @@ type Literal struct {
 	Int    *int     `| @Int`
 	Float  *float64 `| @Float`
 	Bool   *Boolean `| @("true" | "false")`
+}
+
+type UnaryExpression struct {
+	Op    *Operation `@( "+" | "-" )`
+	Right *Value     `@@`
 }
 
 type Expression struct {

@@ -20,31 +20,57 @@ func TestNewParser(t *testing.T) {
 // Testing literals and idents... //
 ////////////////////////////////////
 
-func TestIntValue(t *testing.T) {
-	s := "1"
-	ast, err := expr.NewParser().Parse(s)
-	if err != nil {
-		t.Errorf("Error parsing %q: %v", s, err)
-	}
-	repr.Println(ast)
-}
-
-func TestStringValue(t *testing.T) {
-	s := `"test"`
-	ast, err := expr.NewParser().Parse(s)
-	if err != nil {
-		t.Errorf("Error parsing %q: %v", s, err)
-	}
-	repr.Println(ast)
-}
-
-func TestIdentValue(t *testing.T) {
-	s := `test`
-	ast, err := expr.NewParser().Parse(s)
-	if err != nil {
-		t.Errorf("Error parsing %q: %v", s, err)
-	}
-	repr.Println(ast)
+func TestValue(t *testing.T) {
+	t.Run("int", func(t *testing.T) {
+		s := "1"
+		ast, err := expr.NewParser().Parse(s)
+		if err != nil {
+			t.Errorf("Error parsing %q: %v", s, err)
+		}
+		if testing.Verbose() {
+			repr.Println(ast)
+		}
+	})
+	t.Run("negative-int", func(t *testing.T) {
+		s := "-1"
+		ast, err := expr.NewParser().Parse(s)
+		if err != nil {
+			t.Errorf("Error parsing %q: %v", s, err)
+		}
+		if testing.Verbose() {
+			repr.Println(ast)
+		}
+	})
+	t.Run("float", func(t *testing.T) {
+		s := "1.2"
+		ast, err := expr.NewParser().Parse(s)
+		if err != nil {
+			t.Errorf("Error parsing %q: %v", s, err)
+		}
+		if testing.Verbose() {
+			repr.Println(ast)
+		}
+	})
+	t.Run("string", func(t *testing.T) {
+		s := `"test"`
+		ast, err := expr.NewParser().Parse(s)
+		if err != nil {
+			t.Errorf("Error parsing %q: %v", s, err)
+		}
+		if testing.Verbose() {
+			repr.Println(ast)
+		}
+	})
+	t.Run("ident", func(t *testing.T) {
+		s := `test`
+		ast, err := expr.NewParser().Parse(s)
+		if err != nil {
+			t.Errorf("Error parsing %q: %v", s, err)
+		}
+		if testing.Verbose() {
+			repr.Println(ast)
+		}
+	})
 }
 
 //////////////////////////
@@ -151,36 +177,52 @@ func TestCaptureOp(t *testing.T) {
 // Testing expressions... //
 ////////////////////////////
 
-func TestExpressionAdd(t *testing.T) {
-	// Input to test
-	s := `1 + 2`
+func TestExpression(t *testing.T) {
+	t.Run("add", func(t *testing.T) {
+		// Input to test
+		s := `1 + 2`
 
-	// Build the parser...
-	p := participle.MustBuild(&expr.Expression{})
-	var exp expr.Expression
+		// Build the parser...
+		p := participle.MustBuild(&expr.Expression{})
+		var exp expr.Expression
 
-	// Parse the result
-	err := p.ParseString("", s, &exp)
-	if err != nil {
-		t.Errorf("Error parsing %q: %v", s, err)
-	}
-	repr.Println(exp)
-}
+		// Parse the result
+		err := p.ParseString("", s, &exp)
+		if err != nil {
+			t.Errorf("Error parsing %q: %v", s, err)
+		}
+		repr.Println(exp)
+	})
+	t.Run("sub", func(t *testing.T) {
+		// Input to test
+		s := `1 - 2`
 
-func TestExpressionSub(t *testing.T) {
-	// Input to test
-	s := `1 - 2`
+		// Build the parser...
+		p := participle.MustBuild(&expr.Expression{})
+		var exp expr.Expression
 
-	// Build the parser...
-	p := participle.MustBuild(&expr.Expression{})
-	var exp expr.Expression
+		// Parse the result
+		err := p.ParseString("", s, &exp)
+		if err != nil {
+			t.Errorf("Error parsing %q: %v", s, err)
+		}
+		repr.Println(exp)
+	})
+	t.Run("multi", func(t *testing.T) {
+		// Input to test
+		s := `1 - (2 + 1)`
 
-	// Parse the result
-	err := p.ParseString("", s, &exp)
-	if err != nil {
-		t.Errorf("Error parsing %q: %v", s, err)
-	}
-	repr.Println(exp)
+		// Build the parser...
+		p := participle.MustBuild(&expr.Expression{})
+		var exp expr.Expression
+
+		// Parse the result
+		err := p.ParseString("", s, &exp)
+		if err != nil {
+			t.Errorf("Error parsing %q: %v", s, err)
+		}
+		repr.Println(exp)
+	})
 }
 
 //////////////////////////
@@ -195,7 +237,9 @@ func TestEmptyFunctionValue(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error parsing %q: %v", s, err)
 	}
-	repr.Println(fn)
+	if testing.Verbose() {
+		repr.Println(fn)
+	}
 }
 
 func TestOneArgFunctionValue(t *testing.T) {
@@ -206,7 +250,9 @@ func TestOneArgFunctionValue(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error parsing %q: %v", s, err)
 	}
-	repr.Println(fn)
+	if testing.Verbose() {
+		repr.Println(fn)
+	}
 }
 
 func TestMultiArgFunctionValue(t *testing.T) {
@@ -217,5 +263,9 @@ func TestMultiArgFunctionValue(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error parsing %q: %v", s, err)
 	}
-	repr.Println(fn)
+	if testing.Verbose() {
+		repr.Println(fn)
+	}
 }
+
+//////////////////////////////////////
