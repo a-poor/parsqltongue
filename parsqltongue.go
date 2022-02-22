@@ -37,10 +37,10 @@ type SelectStatement struct {
 }
 
 type SelectClause struct {
-	TableName *string `[@Ident "."]`
-	Value     *Value  `@@`
-	Expr      *Expr   `| @@`
-	Alias     *string `[["AS"] @Ident]`
+	// TableName *string       `[@Ident "."]`
+	Value *LiteralValue `@@`
+	Expr  *Expr         `| @@`
+	// Alias     *string       `[["AS"] @Ident]`
 }
 
 type Operation int
@@ -73,20 +73,24 @@ func (o *Operation) Capture(s []string) error {
 }
 
 type Expr struct {
-	Left  *Value     `@@`
-	Op    *Operation `@("+" | "-" | "*" | "/")`
-	Right *Value     `@@`
+	Left  *LiteralValue `@@`
+	Op    *Operation    `@("+" | "-" | "*" | "/")`
+	Right *LiteralValue `@@`
 }
 
-type Func struct {
-}
+// type Func struct {
+// }
 
-type FuncArg struct {
-	Val *Value `@@`
-	// Func *Func  `@@`
-}
+// type FuncArg struct {
+// 	Val *Value `@@`
+// 	// Func *Func  `@@`
+// }
 
-type Value struct {
+type Star *string
+
+type Name *string
+
+type LiteralValue struct {
 	Star   *string  `@"*"`
 	Name   *string  `| @Ident`
 	String *string  `| @String`
